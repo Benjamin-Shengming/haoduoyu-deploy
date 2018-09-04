@@ -38,21 +38,48 @@ def apt_install(pkg):
     for line in apt("install", pkg, _iter=True):
         sys.stdout.write(line)
 
+def git_clone(repo_url):
+    for line in git("clone", repo_url, _iter=True):
+        sys.stdout.write(line)
+
 # install apt package
-apt_install('npm')
+apt_packages = [
+    'npm',
+]
+for item in apt_packages:
+    apt_install(item)
 
 #install python package
-pip_install("dash")
-pip_install("dash-html-components")
-pip_install("dash-core-components")
-pip_install("requests")
-pip_install("pandas")
-pip_install("plotly")
-pip_install("flask")
-pip_install("numpy")
-pip_install("coloredlogs")
-pip_install("python-dateutil")
-pip_install("sd-material-ui")
-pip_install("imapclient")
+python_packages = [
+    "dash",
+    "dash-html-components",
+    "dash-core-components",
+    "requests",
+    "pandas",
+    "plotly",
+    "flask",
+    "numpy",
+    "coloredlogs",
+    "python-dateutil",
+    "sd-material-ui",
+    "imapclient",
+]
+for item in python_packages:
+    pip_install(item)
 
 #git clone
+git_repos = [
+    r"https://github.com/Benjamin-Shengming/flask-vue-club.git",
+    r"https://github.com/Benjamin-Shengming/localstorage-writer.git",
+    r"https://github.com/Benjamin-Shengming/localstorage-reader.git",
+    r"https://github.com/Benjamin-Shengming/autolink.git",
+    r"https://github.com/plotly/dash-table-experiments.git",
+]
+for item in git_repos:
+    git_clone(item)
+
+
+# build and install repo
+build_repos = [
+    ""
+]
