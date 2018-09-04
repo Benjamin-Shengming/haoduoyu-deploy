@@ -46,5 +46,13 @@ pip_install("dash")
 pip_install("dash-html-components")
 pip_install("dash-core-components")
 pip_install("requests")
+pip_install("pandas")
+pip_install("plotly")
+pip_install("flask")
+pip_install("numpy")
+pip_install("coloredlogs")
+pip_install("python-dateutil")
+pip_install("sd-material-ui")
+pip_install("imapclient")
 
 #git clone
