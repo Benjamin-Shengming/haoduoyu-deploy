@@ -3,7 +3,9 @@
 import subprocess
 import os
 import sys
+import shutil
 # check sudo user
+#
 
 if os.getuid() != 0:
     raise ValueError("please run: sudo ./deploy.py")
@@ -29,18 +31,38 @@ except:
 
 from sh import pip, apt, git, npm
 
+
+
+#install sh library
+try:
+    import fabric
+except:
+    install_pkg('fabric')
+
+from invoke import run, context
+
 def pip_install(pkg):
-    for line in pip("install", pkg, _iter=True):
-        sys.stdout.write(line)
+    run("pip install {}".format(pkg))
 
 
 def apt_install(pkg):
-    for line in apt("install", pkg, _iter=True):
-        sys.stdout.write(line)
+    run("apt install {}".format(pkg))
 
 def git_clone(repo_url):
-    for line in git("clone", repo_url, _iter=True):
-        sys.stdout.write(line)
+    run("git clone {}".format(repo_url))
+
+# folders to delete
+build_repos = [
+    "localstorage-writer",
+    "localstorage-reader",
+    "autolink",
+    "dash-table-experiments",
+    "flask-vue-club",
+]
+
+for folder in build_repos:
+    if os.path.exists(folder):
+        shutil.rmtree(folder)
 
 # install apt package
 apt_packages = [
@@ -69,17 +91,26 @@ for item in python_packages:
 
 #git clone
 git_repos = [
-    r"https://github.com/Benjamin-Shengming/flask-vue-club.git",
     r"https://github.com/Benjamin-Shengming/localstorage-writer.git",
     r"https://github.com/Benjamin-Shengming/localstorage-reader.git",
     r"https://github.com/Benjamin-Shengming/autolink.git",
     r"https://github.com/plotly/dash-table-experiments.git",
+
+    # major repo
+    r"https://github.com/Benjamin-Shengming/flask-vue-club.git",
+
 ]
 for item in git_repos:
     git_clone(item)
+    break
+
+# build repos
+for repo in build_repos:
+    c = context.Context()
+    if repo != "flask-vue-club":
+        with c.cd(repo):
+            c.run("npm install")
+            c.run("npm run prepublish")
+            c.run("npm run install-local")
 
 
-# build and install repo
-build_repos = [
-    ""
-]
