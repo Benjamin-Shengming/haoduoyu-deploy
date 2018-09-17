@@ -63,6 +63,13 @@ python_packages = [
     "python-dateutil",
     "sd-material-ui",
     "imapclient",
+    "cherrypy",
+    "wechatpy",
+    "sqlalchemy",
+    "flask_login",
+    "flask_babel",
+    "Pillow",
+
 ]
 for item in python_packages:
     pip_install(item)
@@ -89,6 +96,11 @@ for repo in build_repos:
             c.run("npm install")
             try:
                 c.run("npm run prepublish")
+            except:
+                pass
+
+            try:
+                c.run("npm run start")
             except:
                 pass
             c.run("npm run install-local")
