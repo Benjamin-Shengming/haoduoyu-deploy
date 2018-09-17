@@ -11,7 +11,7 @@ if os.getuid() != 0:
     raise ValueError("please run: sudo ./deploy.py")
 
 # install python pip as first step
-subprocess.run(['apt', "install", "python-pip"])
+subprocess.run(['apt', "install", "python3-pip"])
 
 try:
     import pip
@@ -102,7 +102,6 @@ git_repos = [
 ]
 for item in git_repos:
     git_clone(item)
-    break
 
 # build repos
 for repo in build_repos:
@@ -110,7 +109,7 @@ for repo in build_repos:
     if repo != "flask-vue-club":
         with c.cd(repo):
             c.run("npm install")
-            c.run("npm run prepublish")
+            #c.run("npm run prepublish")
             c.run("npm run install-local")
 
 
