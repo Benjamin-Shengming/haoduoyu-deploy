@@ -11,9 +11,11 @@ if os.getuid() != 0:
     raise ValueError("please run: sudo ./deploy.py")
 
 # install python pip as first step
-subprocess.check_call(['apt', "install", "python3-pip"])
-subprocess.check_call(['apt', "update"])
-subprocess.check_call(['pip3', "install", "fabric"])
+subprocess.check_call(['rm', "/usr/bin/python"])
+subprocess.check_call(['ln', "-s", "/usr/bin/python3", "/usr/bin/python"])
+subprocess.check_call(['apt', "install", "python3-pip", "-y"])
+subprocess.check_call(['apt', "update", "-y"])
+subprocess.check_call(['pip3', "install", "fabric", "-y"])
 
 from invoke import run, context
 def install_pkg(package):
