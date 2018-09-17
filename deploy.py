@@ -87,7 +87,10 @@ for repo in build_repos:
     if repo != "flask-vue-club":
         with c.cd(repo):
             c.run("npm install")
-            #c.run("npm run prepublish")
+            try:
+                c.run("npm run prepublish")
+            except:
+                pass
             c.run("npm run install-local")
 
 
