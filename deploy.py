@@ -12,6 +12,7 @@ if os.getuid() != 0:
 
 # install python pip as first step
 subprocess.run(['apt', "install", "python3-pip"])
+subprocess.run(['apt', "update"])
 
 try:
     import pip
