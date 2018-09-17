@@ -18,13 +18,9 @@ subprocess.check_call(['apt', "update", "-y"])
 subprocess.check_call(['pip3', "install", "fabric", "-y"])
 
 from invoke import run, context
-def install_pkg(package):
-    run('pip3 install ' + package)
-
-
 
 def pip_install(pkg):
-    run("pip install {}".format(pkg))
+    run("pip3 install {}".format(pkg))
 
 
 def apt_install(pkg):
