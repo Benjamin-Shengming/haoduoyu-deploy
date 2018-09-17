@@ -13,34 +13,13 @@ if os.getuid() != 0:
 # install python pip as first step
 subprocess.check_call(['apt', "install", "python3-pip"])
 subprocess.check_call(['apt', "update"])
-
-try:
-    import pip
-except:
-    raise ValueError("Pip was not installed!")
-
-def install_pkg(package):
-    ret = pip.main(['install', package])
-    print(ret)
-
-#install sh library
-try:
-    import sh
-except:
-    install_pkg('sh')
-
-
-from sh import pip, apt, git, npm
-
-
-
-#install sh library
-try:
-    import fabric
-except:
-    install_pkg('fabric')
+subprocess.check_call(['pip3', "install", "fabric"])
 
 from invoke import run, context
+def install_pkg(package):
+    run('pip3 install ' + package)
+
+
 
 def pip_install(pkg):
     run("pip install {}".format(pkg))
