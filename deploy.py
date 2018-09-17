@@ -11,8 +11,8 @@ if os.getuid() != 0:
     raise ValueError("please run: sudo ./deploy.py")
 
 # install python pip as first step
-subprocess.run(['apt', "install", "python3-pip"])
-subprocess.run(['apt', "update"])
+subprocess.check_call(['apt', "install", "python3-pip"])
+subprocess.check_call(['apt', "update"])
 
 try:
     import pip
