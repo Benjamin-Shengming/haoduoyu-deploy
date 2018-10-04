@@ -97,12 +97,11 @@ for repo in build_repos:
             try:
                 c.run("npm run prepublish")
             except:
-                pass
-
-            try:
-                c.run("npm run start")
-            except:
-                pass
+                # try other ways
+                try:
+                    c.run("npm run start")
+                except:
+                    pass
             c.run("npm run install-local")
 
 
