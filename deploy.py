@@ -48,15 +48,15 @@ git_repos = [
     # major repo
     r"https://github.com/Benjamin-Shengming/flask-vue-club.git",
 ]
-# folders to build/clean
+
+# folders to build
 build_repos_dir = [
     "localstorage-writer",
     "localstorage-reader",
     "autolink",
     "dash-table-experiments",
-    "flask-vue-club",
 ]
-
+clone_repos_dir = build_repos_dir + ['flask-vue-club']
 
 def install_apt_packages():
     # install apt package
@@ -111,14 +111,13 @@ def build_repos(repos):
     # build repos
     for repo in repos:
         c = context.Context()
-        if repo != "flask-vue-club":
-            with c.cd(repo):
-                c.run("npm install")
-                try:
-                    c.run("npm run prepublish")
-                except Exception as e:
-                    print(str(e))
-                c.run("npm run install-local")
+        with c.cd(repo):
+            c.run("npm install")
+            try:
+                c.run("npm run prepublish")
+            except Exception as e:
+                print(str(e))
+            c.run("npm run install-local")
 
 
 # command can be invoke from command line interface
@@ -135,7 +134,7 @@ def run_build_repo(args):
 
 
 def run_clean_repo(args):
-    clean_repos(build_repos_dir)
+    clean_repos(clone_repos_dir)
 
 
 def run_clone_git_repos(args):
