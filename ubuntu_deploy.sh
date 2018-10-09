@@ -8,5 +8,5 @@ pip3 install fabric
 pip3 install pyinvoke 
 
 #=============================================================
-/usr/bin/python3 deploy.py
+python3 deploy.py
 
