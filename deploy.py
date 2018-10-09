@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import subprocess
 import os
@@ -10,29 +10,10 @@ import argparse
 this_module = sys.modules[__name__]
 
 
-def install_pre_requirest():
-    # install python pip as first step
-    subprocess.check_call(['rm', "/usr/bin/python"])
-    subprocess.check_call(['ln', "-s", "/usr/bin/python3", "/usr/bin/python"])
-    subprocess.check_call(['apt', "install", "python3-pip", "-y"])
-    subprocess.check_call(['apt', "update", "-y"])
-    subprocess.check_call(['pip3', "install", "fabric"])
-
 
 def check_run_as_root():
     if os.geteuid() != 0:
         raise ValueError("Please run this script as root(sudo)!")
-
-
-def pip_install(pkg):
-    from invoke import run
-    run("pip3 install {}".format(pkg))
-
-
-def apt_install(pkg):
-    from invoke import run
-    run("apt install {}".format(pkg))
-
 
 def git_clone(repo_url):
     from invoke import run
@@ -46,7 +27,7 @@ git_repos = [
     r"https://github.com/plotly/dash-table-experiments.git",
 
     # major repo
-    r"https://github.com/Benjamin-Shengming/flask-vue-club.git",
+    r"https://github.com/Benjamin-Shengming/haoduoyu-club.git",
 ]
 
 # folders to build
@@ -55,50 +36,15 @@ build_repos_dir = [
     "localstorage-reader",
     "autolink",
     "dash-table-experiments",
+    "haoduoyu-club"
 ]
-clone_repos_dir = build_repos_dir + ['flask-vue-club']
 
-def install_apt_packages():
-    # install apt package
-    apt_packages = [
-        'npm',
-    ]
-    for item in apt_packages:
-        apt_install(item)
 
 
 def clean_repos(repos):
     for folder in repos:
         if os.path.exists(folder):
             shutil.rmtree(folder)
-
-
-def install_python_packages():
-    # install python package
-    python_packages = [
-        "dash",
-        "dash-html-components",
-        "dash-core-components",
-        "requests",
-        "pandas",
-        "plotly",
-        "flask",
-        "numpy",
-        "coloredlogs",
-        "python-dateutil",
-        "sd-material-ui",
-        "imapclient",
-        "cherrypy",
-        "wechatpy",
-        "sqlalchemy",
-        "flask_login",
-        "flask_babel",
-        "Pillow",
-        "pyjwt",
-
-    ]
-    for item in python_packages:
-        pip_install(item)
 
 
 def clone_repos(repos):
@@ -110,23 +56,19 @@ def build_repos(repos):
     from invoke import context
     # build repos
     for repo in repos:
+
         c = context.Context()
         with c.cd(repo):
-            c.run("npm install")
-            try:
-                c.run("npm run prepublish")
-            except Exception as e:
-                print(str(e))
-            c.run("npm run install-local")
+            if repo == "haoduoyu-club":
+                c.run("pip3 install -r requirement.txt")
+            else:
+                c.run("npm install")
+                try:
+                    c.run("npm run prepublish")
+                except Exception as e:
+                    print(str(e))
+                c.run("npm run install-local")
 
-
-# command can be invoke from command line interface
-def run_install_python_package(args):
-    install_python_packages()
-
-
-def run_install_apt_pkg(args):
-    install_apt_packages()
 
 
 def run_build_repo(args):
@@ -134,18 +76,16 @@ def run_build_repo(args):
 
 
 def run_clean_repo(args):
-    clean_repos(clone_repos_dir)
+    clean_repos(build_repos_dir)
 
 
-def run_clone_git_repos(args):
+def run_clone_repos(args):
     clone_repos(git_repos)
 
 
 def run_all(args):
-    run_install_apt_pkg(args)
-    run_install_python_package(args)
     run_clean_repo(args)
-    run_clone_git_repos(args)
+    run_clone_repos(args)
     run_build_repo(args)
 
 
@@ -179,7 +119,6 @@ def parse_args():
 def main():
     args = parse_args()
     check_run_as_root()
-    install_pre_requirest()
     call_command(args.command, args)
 
 
